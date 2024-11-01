@@ -1,0 +1,52 @@
+.lista {
+	@apply flex flex-col gap-4;
+	li {
+		@apply flex gap-2 items-center;
+	}
+	li input,
+	select,
+	textarea {
+		@apply flex-grow disabled:bg-white;
+	}
+}
+input,
+select,
+textarea {
+	@apply p-1;
+}
+strong {
+	@apply font-semibold;
+}
+.modal {
+	ul {
+		@apply flex flex-col;
+	}
+	li {
+		@apply flex justify-end gap-2 p-2 items-center;
+	}
+	input,
+	select,
+	textarea {
+		@apply p-2 flex-grow border border-stone-400 focus:outline-none;
+	}
+}
+.tblAnalise {
+	@apply odd:bg-white even:bg-slate-100;
+	table tr,
+	th,
+	td {
+		@apply border border-slate-600 px-2 m-0;
+	}
+	th {
+		@apply text-emerald-800 whitespace-nowrap;
+	}
+	thead tr {
+		@apply bg-emerald-600/30;
+	}
+	tbody tr {
+		@apply bg-white hover:bg-amber-100;
+	}
+	p {
+		@apply truncate text-ellipsis overflow-hidden;
+	}
+}

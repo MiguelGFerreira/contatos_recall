@@ -2,20 +2,134 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+	@apply bg-gray-300;
+}
+
+h1 {
+	@apply font-semibold text-2xl text-center
+    pt-2 mb-4 mt-0;
+}
+
+.lajota {
+	@apply bg-stone-200;
+	header {
+		@apply bg-emerald-800 text-amber-400 py-1 mb-6;
+	}
+}
+
+.swalConfirmBtn {
+	@apply bg-[#22C55E] text-white rounded-[.25em] py-[10px] px-4 text-base;
+}
+.swalCancelBtn {
+	@apply bg-[#6E7881] text-white rounded-[.25em] py-[10px] px-4 text-base;
+}
+
+.btn {
+	@apply font-bold py-2 px-4 rounded-lg ring-4
+   active:translate-y-[2px] active:translate-x-[1px]
+   bg-green-400 text-stone-700
+   ring-green-500 ring-inset
+   hover:bg-green-300 hover:ring-green-400
+   active:bg-green-200 active:ring-green-300
+   cursor-pointer;
+}
+.btnZero {
+	@apply font-bold py-2 px-4 rounded-lg ring-4
+   active:translate-y-[2px] active:translate-x-[1px]
+   bg-white bg-opacity-0 text-white
+   ring-white ring-inset
+   hover:bg-opacity-10
+   active:bg-opacity-50 active:ring-stone-200
+   cursor-pointer;
+}
+.btnAzul {
+	@apply font-bold py-2 px-4 rounded-lg ring-4
+   active:translate-y-[2px] active:translate-x-[1px]
+   bg-sky-300 text-stone-700
+   ring-sky-400 ring-inset
+   hover:bg-sky-200 hover:ring-sky-300
+   active:bg-sky-100 active:ring-sky-200
+   cursor-pointer;
+}
+.btnAlerta {
+	@apply font-bold py-2 px-4 rounded-lg ring-4
+   active:translate-y-[2px] active:translate-x-[1px]
+   bg-yellow-400 text-stone-700
+   ring-yellow-500 ring-inset
+   hover:bg-yellow-300 hover:ring-yellow-400
+   active:bg-yellow-200 active:ring-yellow-300
+   cursor-pointer;
+}
+.btnNeutro {
+	@apply font-bold py-2 px-4 rounded-lg ring-4
+   active:translate-y-[2px] active:translate-x-[1px]
+   bg-gray-400 text-stone-700
+   ring-gray-500 ring-inset
+   hover:bg-gray-300 hover:ring-gray-400
+   active:bg-gray-200 active:ring-gray-300
+   cursor-pointer;
+}
+.btnPerigo {
+	@apply font-bold py-2 px-4 rounded-lg ring-4
+	active:translate-y-[2px] active:translate-x-[1px]
+	bg-red-600 text-white
+	ring-red-700 ring-inset
+	hover:bg-red-500 hover:ring-red-600
+	active:bg-red-400 active:ring-red-400
+	cursor-pointer;
+}
+.lnk {
+	@apply text-green-800 font-semibold underline m-2 hover:text-green-600;
+}
+.lnkLight {
+	@apply text-stone-200 font-semibold underline m-2
+   hover:text-white active:translate-y-[2px] active:translate-x-[1px];
+}
+.aba {
+	@apply bg-stone-300 border-stone-400
+   rounded-t-xl w-full pt-2 border
+   peer-checked:bg-green-400;
+}
+.aba:hover {
+	@apply shadow-stone-300 shadow-inner bg-stone-200;
+}
+.aba:has(input[type="radio"]:checked) {
+	@apply bg-stone-200 border-b-0;
+}
+.aba:has(input[type="radio"]:checked):hover {
+	@apply shadow-none;
+}
+
+.tabela {
+	input {
+		@apply p-0 m-0;
+	}
+	table tr,
+	th,
+	td {
+		@apply border border-slate-600 px-2 m-0;
+	}
+	th {
+		@apply text-emerald-800;
+	}
+	table input {
+		@apply border-none w-full min-h-8 focus:outline-none rounded-none px-2;
+	}
+	thead tr {
+		@apply bg-emerald-600/30;
+	}
+	tbody tr {
+		@apply odd:bg-white even:bg-zinc-200 hover:bg-amber-100;
+	}
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.noscrollbar::-webkit-scrollbar {
+	display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.noscrollbar {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
 }
