@@ -4,10 +4,17 @@ import { useEffect, useState } from "react";
 import { getContatos } from "@/api";
 import { Contato } from "@/types";
 import LoadingSpinner from "./LoadingSpinner";
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+import * as pdfMake from "pdfmake/build/pdfmake";
+import { gerarPDF } from "@/utils/gerarPDF";
 
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+(pdfMake as any).fonts = {
+	Roboto: {
+		normal: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf',
+		bold: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Medium.ttf',
+		italics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Italic.ttf',
+		bolditalics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-MediumItalic.ttf'
+	},
+}
 
 const TableContatos = () => {
 	const [contatos, setContatos] = useState<Contato[] | null>(null);
@@ -34,47 +41,14 @@ const TableContatos = () => {
 		return { apoio, equipe, externo };
 	}
 
-	const gerarPDF = () => {
+	const handleGerarPDF = () => {
 		const { apoio, equipe, externo } = dividirTipos();
-
-		const criarTabela = (dados: Contato[], titulo: string) => {
-			return [
-				[{ text: titulo, style: "tableHeader", colSpan: 4, alignment: "center" }, {}, {}, {}],
-				["Contato", "Email", "Setor", "Telefone"],
-				...dados.map(contato => [
-					contato.CONTATO,
-					contato.EMAIL,
-					contato.SETOR,
-					contato.TELEFONE
-				])
-			];
-		};
-
-		const docDefinition = {
-			styles: {
-				header: { fontSize: 18, bold: true, alignment: "center" },
-				subheader: { fontSize: 14, bold: true },
-				tableHeader: { bold: true, fillColor: "#eeeeee" },
-				table: { margin: [0, 5, 0, 15] }
-			},
-			content: [
-				{ text: "Contatos da Equipe Multidisciplinar", style: "header" },
-				{ text: "\nTabela de Apoio\n", style: "subheader" },
-				{ table: { body: criarTabela(apoio, "Apoio") }, style: "table" },
-				{ text: "\nTabela de Equipe\n", style: "subheader" },
-				{ table: { body: criarTabela(equipe, "Equipe") }, style: "table" },
-				{ text: "\nTabela Externo\n", style: "subheader" },
-				{ table: { body: criarTabela(externo, "Externo") }, style: "table" }
-			],
-		};
-
-		//@ts-ignore
-		pdfMake.createPdf(docDefinition).open();
-	};
+		gerarPDF(apoio, equipe, externo);
+	  };
 
 	return (
 		<section>
-			<button onClick={gerarPDF} className="btn">Gerar PDF</button>
+			<button onClick={handleGerarPDF} className="btn">Gerar PDF</button>
 			<table className="tabela">
 				<thead>
 					<tr>

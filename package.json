@@ -11,7 +11,7 @@
   "dependencies": {
     "contatos_recall": "file:",
     "next": "15.0.2",
-    "pdfmake": "^0.2.14",
+    "pdfmake": "^0.2.15",
     "react": "19.0.0-rc-02c0e824-20241028",
     "react-dom": "19.0.0-rc-02c0e824-20241028"
   },
