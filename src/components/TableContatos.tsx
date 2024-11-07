@@ -6,6 +6,7 @@ import { Contato } from "@/types";
 import LoadingSpinner from "./LoadingSpinner";
 import * as pdfMake from "pdfmake/build/pdfmake";
 import { gerarPDF } from "@/utils/gerarPDF";
+import NewContactForm from "./NewContactForm";
 
 (pdfMake as any).fonts = {
 	Roboto: {
@@ -18,6 +19,7 @@ import { gerarPDF } from "@/utils/gerarPDF";
 
 const TableContatos = () => {
 	const [contatos, setContatos] = useState<Contato[] | null>(null);
+	const [visible, setvisible] = useState(true);
 
 	const formatData = (data: string) => {
 		return data.split(";").map((item) => item.trim()).join("<br />")
@@ -44,11 +46,13 @@ const TableContatos = () => {
 	const handleGerarPDF = () => {
 		const { apoio, equipe, externo } = dividirTipos();
 		gerarPDF(apoio, equipe, externo);
-	  };
+	};
 
 	return (
 		<section>
 			<button onClick={handleGerarPDF} className="btn">Gerar PDF</button>
+			<button onClick={() => setvisible(!visible)} className="btn">Novo contato</button>
+			<NewContactForm visible={visible} />
 			<table className="tabela">
 				<thead>
 					<tr>

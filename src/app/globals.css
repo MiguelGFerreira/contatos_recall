@@ -11,18 +11,23 @@ h1 {
     pt-2 mb-4 mt-0;
 }
 
+input {
+	@apply w-full border border-gray-300 rounded-md px-4 py-2 mb-4 focus:outline-none focus:border-[#003B2F] focus:ring-1 focus:ring-[#003B2F] transition duration-300;
+}
+
+label {
+	@apply block text-sm font-medium text-gray-700;
+}
+
+select {
+	@apply mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#003B2F] focus:border-[#003B2F] sm:text-sm;
+}
+
 .lajota {
 	@apply bg-stone-200;
 	header {
 		@apply bg-emerald-800 text-amber-400 py-1 mb-6;
 	}
-}
-
-.swalConfirmBtn {
-	@apply bg-[#22C55E] text-white rounded-[.25em] py-[10px] px-4 text-base;
-}
-.swalCancelBtn {
-	@apply bg-[#6E7881] text-white rounded-[.25em] py-[10px] px-4 text-base;
 }
 
 .btn {
@@ -34,71 +39,9 @@ h1 {
    active:bg-green-200 active:ring-green-300
    cursor-pointer;
 }
-.btnZero {
-	@apply font-bold py-2 px-4 rounded-lg ring-4
-   active:translate-y-[2px] active:translate-x-[1px]
-   bg-white bg-opacity-0 text-white
-   ring-white ring-inset
-   hover:bg-opacity-10
-   active:bg-opacity-50 active:ring-stone-200
-   cursor-pointer;
-}
-.btnAzul {
-	@apply font-bold py-2 px-4 rounded-lg ring-4
-   active:translate-y-[2px] active:translate-x-[1px]
-   bg-sky-300 text-stone-700
-   ring-sky-400 ring-inset
-   hover:bg-sky-200 hover:ring-sky-300
-   active:bg-sky-100 active:ring-sky-200
-   cursor-pointer;
-}
-.btnAlerta {
-	@apply font-bold py-2 px-4 rounded-lg ring-4
-   active:translate-y-[2px] active:translate-x-[1px]
-   bg-yellow-400 text-stone-700
-   ring-yellow-500 ring-inset
-   hover:bg-yellow-300 hover:ring-yellow-400
-   active:bg-yellow-200 active:ring-yellow-300
-   cursor-pointer;
-}
-.btnNeutro {
-	@apply font-bold py-2 px-4 rounded-lg ring-4
-   active:translate-y-[2px] active:translate-x-[1px]
-   bg-gray-400 text-stone-700
-   ring-gray-500 ring-inset
-   hover:bg-gray-300 hover:ring-gray-400
-   active:bg-gray-200 active:ring-gray-300
-   cursor-pointer;
-}
-.btnPerigo {
-	@apply font-bold py-2 px-4 rounded-lg ring-4
-	active:translate-y-[2px] active:translate-x-[1px]
-	bg-red-600 text-white
-	ring-red-700 ring-inset
-	hover:bg-red-500 hover:ring-red-600
-	active:bg-red-400 active:ring-red-400
-	cursor-pointer;
-}
-.lnk {
-	@apply text-green-800 font-semibold underline m-2 hover:text-green-600;
-}
-.lnkLight {
-	@apply text-stone-200 font-semibold underline m-2
-   hover:text-white active:translate-y-[2px] active:translate-x-[1px];
-}
-.aba {
-	@apply bg-stone-300 border-stone-400
-   rounded-t-xl w-full pt-2 border
-   peer-checked:bg-green-400;
-}
-.aba:hover {
-	@apply shadow-stone-300 shadow-inner bg-stone-200;
-}
-.aba:has(input[type="radio"]:checked) {
-	@apply bg-stone-200 border-b-0;
-}
-.aba:has(input[type="radio"]:checked):hover {
-	@apply shadow-none;
+
+.card {
+	@apply space-y-6 bg-white shadow-lg p-6 rounded-md;
 }
 
 .tabela {

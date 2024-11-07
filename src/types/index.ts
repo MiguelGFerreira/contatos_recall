@@ -1,5 +1,5 @@
 export interface Contato {
-	ID: number,
+	ID?: number,
 	CONTATO: string,
 	MATRICULA: string,
 	SETOR: string,
