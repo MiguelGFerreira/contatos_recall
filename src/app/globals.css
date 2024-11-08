@@ -38,10 +38,19 @@ select {
    hover:bg-green-300 hover:ring-green-400
    active:bg-green-200 active:ring-green-300
    cursor-pointer;
+   transition: all 0.3s ease-in-out
+}
+
+.btn-container {
+	@apply flex justify-start items-center gap-4 m-4
+}
+
+.btn-new-contact {
+	@apply bg-amber-500 text-white hover:bg-amber-400
 }
 
 .card {
-	@apply space-y-6 bg-white shadow-lg p-6 rounded-md;
+	@apply space-y-6 bg-white shadow-lg p-6 rounded-md m-4;
 }
 
 .tabela {
@@ -51,13 +60,13 @@ select {
 	table tr,
 	th,
 	td {
-		@apply border border-slate-600 px-2 m-0;
+		@apply border border-b border-slate-600 px-2 m-0;
 	}
 	th {
-		@apply text-emerald-800;
+		@apply border-b text-emerald-800;
 	}
-	table input {
-		@apply border-none w-full min-h-8 focus:outline-none rounded-none px-2;
+	table tr:last-child td {
+		@apply border-b-0;
 	}
 	thead tr {
 		@apply bg-emerald-600/30;

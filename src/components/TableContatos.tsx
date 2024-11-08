@@ -7,6 +7,7 @@ import LoadingSpinner from "./LoadingSpinner";
 import * as pdfMake from "pdfmake/build/pdfmake";
 import { gerarPDF } from "@/utils/gerarPDF";
 import NewContactForm from "./NewContactForm";
+import { Transition } from "@headlessui/react";
 
 (pdfMake as any).fonts = {
 	Roboto: {
@@ -25,12 +26,12 @@ const TableContatos = () => {
 		return data.split(";").map((item) => item.trim()).join("<br />")
 	}
 
-	useEffect(() => {
-		const fetchContatos = async () => {
-			const data = await getContatos();
-			setContatos(data || []);
-		};
+	const fetchContatos = async () => {
+		const data = await getContatos();
+		setContatos(data || []);
+	};
 
+	useEffect(() => {
 		fetchContatos();
 	}, []);
 
@@ -48,11 +49,21 @@ const TableContatos = () => {
 		gerarPDF(apoio, equipe, externo);
 	};
 
+	const updateContacts = () => {
+		fetchContatos();
+	}
+
 	return (
 		<section>
-			<button onClick={handleGerarPDF} className="btn">Gerar PDF</button>
-			<button onClick={() => setvisible(!visible)} className="btn">Novo contato</button>
-			<NewContactForm visible={visible} />
+			<div className="btn-container">
+				<button onClick={handleGerarPDF} className="btn">Gerar PDF</button>
+				<button onClick={() => setvisible(!visible)} className="btn">Novo contato</button>
+			</div>
+			<Transition show={visible}>
+				<div className="transition duration-300 ease-in data-[closed]:opacity-0">
+					<NewContactForm updateContacts={updateContacts} />
+				</div>
+			</Transition>
 			<table className="tabela">
 				<thead>
 					<tr>

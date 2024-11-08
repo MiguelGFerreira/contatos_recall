@@ -1,6 +1,6 @@
 import { Contato } from "@/types";
 
-const API_URL = 'http://localhost:8000'
+const API_URL = 'http://10.10.200.146:8000'
 
 export const getContatos = async () => {
 	try {
@@ -40,7 +40,7 @@ export const postContato = async (newContact: Contato) => {
 
 	console.log(raw);
 
-	/*fetch(
+	fetch(
 		`${API_URL}/contatos`,
 		{
 			method: 'POST',
@@ -50,5 +50,5 @@ export const postContato = async (newContact: Contato) => {
 		})
 		.then(response => response.text())
 		.then(result => console.log(result))
-		.catch(error => console.log('error', error));*/
+		.catch(error => console.log('error', error));
 }

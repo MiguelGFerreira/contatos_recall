@@ -7,14 +7,16 @@ interface Employee {
 	nome: string;
 }
 
-const NewContactForm = ({ visible }: { visible: boolean }) => {
-	const [tipo, setTipo] = useState('');
-	const [nome, setNome] = useState('');
-	const [email, setEmail] = useState('');
-	const [matricula, setMatricula] = useState('');
-	const [telefone, setTelefone] = useState('');
-	const [setor, setSetor] = useState('');
-	const [site, setSite] = useState('');
+const NewContactForm = ({ updateContacts }: { updateContacts: () => void }) => {
+	const [formValues, setFormValues] = useState({
+		tipo: '',
+		nome: '',
+		email: '',
+		matricula: '',
+		telefone: '',
+		setor: '',
+		site: '',
+	})
 	const [employees, setEmployees] = useState<Employee[]>([]);
 	const [errors, setErrors] = useState({
 		tipo: false,
@@ -26,23 +28,42 @@ const NewContactForm = ({ visible }: { visible: boolean }) => {
 		site: false,
 	})
 
-	const handleTipoChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-		setErrors((prevErrors) => ({ ...prevErrors, tipo: false }))
-		setTipo(event.target.value);
-	};
+	// const handleTipoChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+	// 	setErrors((prevErrors) => ({ ...prevErrors, tipo: false }))
+	// 	setTipo(event.target.value);
+	// };
 
-	const handleMatriculaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setErrors((prevErrors) => ({ ...prevErrors, matricula: false }));
-		setMatricula(event.target.value);
+	// const handleMatriculaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+	// 	setErrors((prevErrors) => ({ ...prevErrors, matricula: false }));
+	// 	setMatricula(event.target.value);
 
-		const matriculaInfo = employees.find(e => e.matricula === event.target.value);
-		if (matriculaInfo) {
-			setNome(matriculaInfo.nome);
+	// 	const matriculaInfo = employees.find(e => e.matricula === event.target.value);
+	// 	if (matriculaInfo) {
+	// 		setNome(matriculaInfo.nome);
+	// 	}
+	// };
+
+	const handleFieldChange = (field: string, value: string) => {
+		setErrors((prevErrors) => ({ ...prevErrors, [field]: false }));
+		setFormValues((prevValues) => ({ ...prevValues, [field]: value }));
+
+		if (field === 'tipo') {
+			if (value === "EQUIPE" || value === "APOIO") {
+				formValues.site = '';
+				return;
+			} else if (value === "EXTERNO") {
+				formValues.matricula = '';
+				formValues.setor = '';
+				return;
+			}
 		}
-	};
+	}
 
-	const handleSubmit = async () => {
-		const newErrors = {
+	const doNothing = () => { return }
+
+	const validateForm = () => {
+		const { tipo, nome, email, telefone, matricula, setor, site } = formValues;
+		return {
 			tipo: !tipo,
 			nome: !nome,
 			email: !email,
@@ -50,41 +71,49 @@ const NewContactForm = ({ visible }: { visible: boolean }) => {
 			matricula: (tipo === "EQUIPE" || tipo === "APOIO") && !matricula,
 			setor: (tipo === "EQUIPE" || tipo === "APOIO") && !setor,
 			site: tipo === "EXTERNO" && !site,
+		};
+	};
+
+	const handleSubmit = async () => {
+		const validationErrors = validateForm();
+		setErrors(validationErrors);
+
+		if (Object.values(validationErrors).includes(true)) return;
+
+		const newContact: Contato = {
+			CONTATO: formValues.nome,
+			MATRICULA: formValues.matricula,
+			SETOR: formValues.setor,
+			TELEFONE: formValues.telefone,
+			EMAIL: formValues.email,
+			SITE: formValues.site,
+			TIPO: formValues.tipo
 		}
 
-		setErrors(newErrors);
+		await postContato(newContact);
 
-		if (Object.values(errors).includes(true)) {
+		updateContacts();
 
-			const newContact: Contato = {
-				CONTATO: nome,
-				MATRICULA: matricula,
-				SETOR: setor,
-				TELEFONE: telefone,
-				EMAIL: email,
-				SITE: site,
-				TIPO: tipo
-			}
+		setFormValues({
+			tipo: '',
+			nome: '',
+			email: '',
+			matricula: '',
+			telefone: '',
+			setor: '',
+			site: '',
+		});
 
-			await postContato(newContact);
+		setErrors({
+			tipo: false,
+			nome: false,
+			email: false,
+			telefone: false,
+			matricula: false,
+			setor: false,
+			site: false,
+		});
 
-			setTipo('');
-			setNome('');
-			setEmail('');
-			setMatricula('');
-			setTelefone('');
-			setSetor('');
-			setSite('');
-			setErrors({
-				tipo: false,
-				nome: false,
-				email: false,
-				telefone: false,
-				matricula: false,
-				setor: false,
-				site: false,
-			});
-		}
 	}
 
 	async function fetchEmployees() {
@@ -97,11 +126,17 @@ const NewContactForm = ({ visible }: { visible: boolean }) => {
 	}, [])
 
 	return (
-		<div hidden={visible} className="card">
+		<div className="card">
 			<div className="grid grid-cols-3 gap-4">
 				<div>
 					<label htmlFor="tipo">Tipo</label>
-					<select name="tipo" id="tipo" value={tipo} onChange={handleTipoChange} className={`${errors.tipo ? 'border-red-500' : 'border-gray-300'}`}>
+					<select
+						name="tipo"
+						id="tipo"
+						value={formValues.tipo}
+						onChange={(e) => handleFieldChange('tipo', e.target.value)}
+						className={`${errors.tipo ? 'border-red-500' : 'border-gray-300'}`}
+					>
 						<option value="">Selecione...</option>
 						<option value="APOIO">Apoio</option>
 						<option value="EQUIPE">Equipe</option>
@@ -115,11 +150,8 @@ const NewContactForm = ({ visible }: { visible: boolean }) => {
 						type="text"
 						id="nome"
 						name="nome"
-						value={nome}
-						onChange={(e) => {
-							setNome(e.target.value);
-							setErrors((prevErrors) => ({ ...prevErrors, nome: false }));
-						}}
+						value={formValues.nome}
+						onChange={(e) => handleFieldChange('nome', e.target.value)}
 						className={`${errors.nome ? 'border-red-500' : 'border-gray-300'}`}
 					/>
 				</div>
@@ -130,11 +162,8 @@ const NewContactForm = ({ visible }: { visible: boolean }) => {
 						type="email"
 						id="email"
 						name="email"
-						value={email}
-						onChange={(e) => {
-							setEmail(e.target.value);
-							setErrors((prevErrors) => ({ ...prevErrors, email: false }));
-						}}
+						value={formValues.email}
+						onChange={(e) => handleFieldChange('email', e.target.value)}
 						className={`${errors.email ? 'border-red-500' : 'border-gray-300'}`}
 					/>
 				</div>
@@ -145,17 +174,14 @@ const NewContactForm = ({ visible }: { visible: boolean }) => {
 						type="tel"
 						id="telefone"
 						name="telefone"
-						value={telefone}
-						onChange={(e) => {
-							setTelefone(e.target.value);
-							setErrors((prevErrors) => ({ ...prevErrors, telefone: false }));
-						}}
+						value={formValues.telefone}
+						onChange={(e) => handleFieldChange('telefone', e.target.value)}
 						className={`${errors.telefone ? 'border-red-500' : 'border-gray-300'}`}
 					/>
 				</div>
 
 				{/* Exibe os campos de Matrícula e Setor apenas para Equipe e Apoio */}
-				{(tipo === 'EQUIPE' || tipo === 'APOIO') && (
+				{(formValues.tipo === 'EQUIPE' || formValues.tipo === 'APOIO') && (
 					<>
 						<div>
 							<label htmlFor="matricula">Matrícula:</label>
@@ -163,8 +189,12 @@ const NewContactForm = ({ visible }: { visible: boolean }) => {
 								list="matriculas"
 								id="matricula"
 								name="matricula"
-								value={matricula}
-								onChange={handleMatriculaChange}
+								value={formValues.matricula}
+								onChange={(e) => {
+									handleFieldChange('matricula', e.target.value);
+									const matriculaInfo = employees.find((f) => f.matricula === e.target.value);
+									matriculaInfo ? handleFieldChange('nome', matriculaInfo.nome) : doNothing
+								}}
 								className={`${errors.matricula ? 'border-red-500' : 'border-gray-300'}`}
 							/>
 							<datalist id="matriculas">
@@ -180,11 +210,8 @@ const NewContactForm = ({ visible }: { visible: boolean }) => {
 								type="text"
 								id="setor"
 								name="setor"
-								value={setor}
-								onChange={(e) => {
-									setSetor(e.target.value);
-									setErrors((prevErrors) => ({ ...prevErrors, setor: false }));
-								}}
+								value={formValues.setor}
+								onChange={(e) => handleFieldChange('setor', e.target.value)}
 								className={`${errors.setor ? 'border-red-500' : 'border-gray-300'}`}
 							/>
 						</div>
@@ -192,25 +219,22 @@ const NewContactForm = ({ visible }: { visible: boolean }) => {
 				)}
 
 				{/* Exibe o campo de Site apenas para Externo */}
-				{tipo === 'EXTERNO' && (
+				{formValues.tipo === 'EXTERNO' && (
 					<div>
 						<label htmlFor="site">Site:</label>
 						<input
 							type="url"
 							id="site"
 							name="site"
-							value={site}
-							onChange={(e) => {
-								setSite(e.target.value);
-								setErrors((prevErrors) => ({ ...prevErrors, site: false }));
-							}}
+							value={formValues.site}
+							onChange={(e) => handleFieldChange('site', e.target.value)}
 							className={`${errors.site ? 'border-red-500' : 'border-gray-300'}`}
 						/>
 					</div>
 				)}
 
-				<button onClick={handleSubmit} className='btn'>Enviar</button>
 			</div>
+			<button onClick={handleSubmit} className='btn'>Enviar</button>
 		</div>
 	);
 };
