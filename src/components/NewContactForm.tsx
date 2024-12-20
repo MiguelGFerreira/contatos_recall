@@ -28,21 +28,6 @@ const NewContactForm = ({ updateContacts }: { updateContacts: () => void }) => {
 		site: false,
 	})
 
-	// const handleTipoChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-	// 	setErrors((prevErrors) => ({ ...prevErrors, tipo: false }))
-	// 	setTipo(event.target.value);
-	// };
-
-	// const handleMatriculaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-	// 	setErrors((prevErrors) => ({ ...prevErrors, matricula: false }));
-	// 	setMatricula(event.target.value);
-
-	// 	const matriculaInfo = employees.find(e => e.matricula === event.target.value);
-	// 	if (matriculaInfo) {
-	// 		setNome(matriculaInfo.nome);
-	// 	}
-	// };
-
 	const handleFieldChange = (field: string, value: string) => {
 		setErrors((prevErrors) => ({ ...prevErrors, [field]: false }));
 		setFormValues((prevValues) => ({ ...prevValues, [field]: value }));
@@ -60,6 +45,13 @@ const NewContactForm = ({ updateContacts }: { updateContacts: () => void }) => {
 	}
 
 	const doNothing = () => { return }
+
+	const formatName = (name: string): string => {
+		const words = name.split(" ");
+		return words
+			.map((word) => word[0].toUpperCase() + word.substring(1).toLowerCase())
+			.join(" ");
+	}
 
 	const validateForm = () => {
 		const { tipo, nome, email, telefone, matricula, setor, site } = formValues;
@@ -81,13 +73,15 @@ const NewContactForm = ({ updateContacts }: { updateContacts: () => void }) => {
 		if (Object.values(validationErrors).includes(true)) return;
 
 		const newContact: Contato = {
+			ID: 0,
 			CONTATO: formValues.nome,
 			MATRICULA: formValues.matricula,
 			SETOR: formValues.setor,
 			TELEFONE: formValues.telefone,
 			EMAIL: formValues.email,
 			SITE: formValues.site,
-			TIPO: formValues.tipo
+			TIPO: formValues.tipo,
+			DELETADO: 0
 		}
 
 		await postContato(newContact);
@@ -113,6 +107,7 @@ const NewContactForm = ({ updateContacts }: { updateContacts: () => void }) => {
 			setor: false,
 			site: false,
 		});
+		location.reload();
 
 	}
 
@@ -193,7 +188,7 @@ const NewContactForm = ({ updateContacts }: { updateContacts: () => void }) => {
 								onChange={(e) => {
 									handleFieldChange('matricula', e.target.value);
 									const matriculaInfo = employees.find((f) => f.matricula === e.target.value);
-									matriculaInfo ? handleFieldChange('nome', matriculaInfo.nome) : doNothing
+									matriculaInfo ? handleFieldChange('nome', formatName(matriculaInfo.nome)) : doNothing
 								}}
 								className={`${errors.matricula ? 'border-red-500' : 'border-gray-300'}`}
 							/>

@@ -41,6 +41,16 @@ select {
    transition: all 0.3s ease-in-out
 }
 
+.btnPerigo {
+	@apply font-bold py-2 px-4 rounded-lg ring-4
+	active:translate-y-[2px] active:translate-x-[1px]
+	bg-red-600 text-white
+	ring-red-700 ring-inset
+	hover:bg-red-500 hover:ring-red-600
+	active:bg-red-400 active:ring-red-400
+	cursor-pointer;
+}
+
 .btn-container {
 	@apply flex justify-start items-center gap-4 m-4
 }
@@ -72,7 +82,7 @@ select {
 		@apply bg-emerald-600/30;
 	}
 	tbody tr {
-		@apply odd:bg-white even:bg-zinc-200 hover:bg-amber-100;
+		@apply odd:bg-white even:bg-zinc-200 hover:bg-amber-100 hover:cursor-pointer;
 	}
 }
 

@@ -1,6 +1,7 @@
-import { Contato } from "@/types";
+import { Contato, TceUser } from "@/types";
+import axios from "axios";
 
-const API_URL = 'http://10.10.200.146:8000'
+const API_URL = 'http://10.0.73.216:83/contatosRecall/express-contatos-recall'
 
 export const getContatos = async () => {
 	try {
@@ -15,10 +16,9 @@ export const getContatos = async () => {
 
 export const getEmployees = async () => {
 	try {
-		const res = await fetch(`${API_URL}/contatos/funcionarios`)
-		const data = await res.json()
+		const res = await axios.get(`${API_URL}/contatos/funcionarios`)
 
-		return data;
+		return res.data;
 	} catch (error) {
 		console.error('Erro ao buscar funcionarios:', error)
 	}
@@ -51,4 +51,83 @@ export const postContato = async (newContact: Contato) => {
 		.then(response => response.text())
 		.then(result => console.log(result))
 		.catch(error => console.log('error', error));
+}
+
+export const patchContato = async (idcontato: number, contatoData: Contato) => {
+	let data = JSON.stringify({
+		"contato": contatoData.CONTATO,
+		"matricula": contatoData.MATRICULA,
+		"setor": contatoData.SETOR,
+		"telefone": contatoData.TELEFONE,
+		"email": contatoData.EMAIL,
+		"site": contatoData.SITE,
+		"deletado": 0
+	});
+
+	let config = {
+		method: 'patch',
+		maxBodyLength: Infinity,
+		url: `${API_URL}/contatos/${idcontato}`,
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		data: data
+	};
+
+	axios.request(config)
+		.then((response) => {
+			return JSON.stringify(response.data);
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+}
+
+export const deleteContato = async (idcontato: number) => {
+	let data = JSON.stringify({
+		"deletado": 1,
+	});
+
+	let config = {
+		method: 'patch',
+		maxBodyLength: Infinity,
+		url: `${API_URL}/contatos/${idcontato}`,
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		data: data
+	};
+
+	axios.request(config)
+		.then((response) => {
+			return JSON.stringify(response.data);
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+}
+
+export const getUser = async () => {
+	try {
+		const response = await axios.get(`http://10.0.73.216:83/flask_login_ad/iis_user`)
+		console.log(response);
+		//console.log(response.data);
+		return response.data
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+export const getTceUser = async (data: any) => {
+	console.log(data)
+	try {
+		const response = await axios.post(`http://10.0.73.216:83/flask_login_ad/tce_user`, data)
+		console.log(response.data);
+		const tceUserData: TceUser = response.data[0] || {} as TceUser
+		//tceUserData = tceUserData? tceUserData :
+		return tceUserData
+	} catch (error) {
+		console.error(error);
+		return {} as TceUser
+	}
 }

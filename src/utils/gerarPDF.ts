@@ -66,7 +66,7 @@ export const gerarPDF = async (apoio: Contato[], equipe: Contato[], externo: Con
 							margin: [0, 8],
 						},
 						{
-							text: "AN-CQ-PPRCQ004-002",
+							text: "FQ-CQ-PPRCQ004-006",
 							alignment: "right",
 						}
 					],
@@ -74,7 +74,7 @@ export const gerarPDF = async (apoio: Contato[], equipe: Contato[], externo: Con
 						{},
 						{},
 						{
-							text: "Vigência: 10/06/2024",
+							text: "Vigência: 17/12/2024",
 							alignment: "right"
 						}
 					],
@@ -82,7 +82,7 @@ export const gerarPDF = async (apoio: Contato[], equipe: Contato[], externo: Con
 						{},
 						{},
 						{
-							text: "Versão: 1",
+							text: "Versão: 13",
 							alignment: "right"
 						}
 					],
@@ -113,11 +113,11 @@ export const gerarPDF = async (apoio: Contato[], equipe: Contato[], externo: Con
 
 		content: [
 			{ text: "\nContatos da Equipe Multidisciplinar:\n", style: "subheader" },
-			{ table: { body: criarTabela(apoio, "Apoio", true) }, style: "table" },
+			{ table: { dontBreakRows: true, body: criarTabela(equipe, "Equipe", true) }, style: "table" },
 			{ text: "\nEquipe de Apoio ao Comitê de Recall:\n", style: "subheader" },
-			{ table: { body: criarTabela(equipe, "Equipe", true) }, style: "table" },
+			{ table: { dontBreakRows: true, body: criarTabela(apoio, "Apoio", true) }, style: "table" },
 			{ text: "\nLista de Contatos Chave Externos:\n", style: "subheader" },
-			{ table: { body: criarTabela(externo, "Externo", false) }, style: "table" }
+			{ table: { dontBreakRows: true, body: criarTabela(externo, "Externo", false) }, style: "table" }
 		],
 	};
 
